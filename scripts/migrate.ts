@@ -18,6 +18,7 @@ class TractionRecord extends Model<TractionRecord> {
   @Column({
     unique: true,
     type: DataType.STRING,
+    allowNull: false,
   })
   name: string;
 
@@ -28,7 +29,7 @@ class TractionRecord extends Model<TractionRecord> {
   updateTime: Date;
 }
 
-const runMigrate = async () => {
+const run = async () => {
   const sequelize = new Sequelize({
     dialect: 'mysql',
     host: 'localhost',
@@ -37,14 +38,11 @@ const runMigrate = async () => {
     password: '123456',
     database: 'blog',
   });
-
   sequelize.addModels([TractionRecord]);
-  await sequelize.sync();
-  const res = await TractionRecord.findAll();
-  console.log(res);
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const obj = require('../src/migrations/.tpl');
-  console.log(obj);
+  await TractionRecord.sync();
+  await TractionRecord.findAll({
+    order: [['name', 'DESC']],
+  });
 };
 
-runMigrate();
+run();
