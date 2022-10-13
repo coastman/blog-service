@@ -1,19 +1,10 @@
-import {
-  Column,
-  Model,
-  Table,
-  PrimaryKey,
-  CreatedAt,
-  UpdatedAt,
-  DataType,
-} from 'sequelize-typescript';
+import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import { CATEGORY } from 'src/constans/table.constant';
 
-@Table
+@Table({
+  tableName: CATEGORY,
+})
 export class Category extends Model<Category> {
-  @PrimaryKey
-  @Column
-  id: number;
-
   @Column({
     unique: true,
     type: DataType.STRING,
@@ -22,10 +13,4 @@ export class Category extends Model<Category> {
 
   @Column(DataType.STRING)
   description: string;
-
-  @CreatedAt
-  createTime: Date;
-
-  @UpdatedAt
-  updateTime: Date;
 }

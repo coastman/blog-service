@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoryModule } from './modules/category/category.module';
+import { LoggerMiddleware } from './middlewares/log.middleware';
 
 @Module({
   imports: [
@@ -14,10 +15,21 @@ import { CategoryModule } from './modules/category/category.module';
       password: '123456',
       database: 'blog',
       autoLoadModels: true,
+      define: {
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_unicode_ci',
+        underscored: true,
+        freezeTableName: true,
+      },
+      timezone: '+08:00',
     }),
     CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
