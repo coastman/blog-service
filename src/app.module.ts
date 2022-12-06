@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoryModule } from './modules/category/category.module';
+import { TagModule } from './modules/tag/tag.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 
 @Module({
@@ -24,6 +25,7 @@ import { LoggerMiddleware } from './middlewares/log.middleware';
       timezone: '+08:00',
     }),
     CategoryModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService],

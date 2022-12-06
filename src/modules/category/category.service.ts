@@ -11,9 +11,9 @@ export class CategoryService {
   ) {}
 
   async getList() {
-    const list = await this.categoryModel.findAll();
+    const list = (await this.categoryModel.findAll()) || [];
 
-    return { list };
+    return { list, count: list.length };
   }
 
   async findById(id: number) {
@@ -29,13 +29,14 @@ export class CategoryService {
       await this.categoryModel.update(updateCategory, {
         where: { id },
       });
+
       return { result: id };
     }
 
     throw new HttpException('category is not existed', HttpStatus.BAD_REQUEST);
   }
 
-  async create({ name, description }) {
+  async create({ name, description = '' }) {
     const existedCategory = await this.categoryModel.findOne({
       where: { name },
     });
@@ -48,6 +49,7 @@ export class CategoryService {
     }
 
     const result = await this.categoryModel.create({ name, description });
+
     return { result };
   }
 
