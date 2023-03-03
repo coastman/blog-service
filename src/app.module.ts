@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoryModule } from './modules/category/category.module';
 import { TagModule } from './modules/tag/tag.module';
+import { ArticleModule } from './modules/article/article.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 
 @Module({
@@ -26,6 +27,7 @@ import { LoggerMiddleware } from './middlewares/log.middleware';
     }),
     CategoryModule,
     TagModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
