@@ -28,4 +28,27 @@ export class ArticleService {
     const result = await this.articleModel.create(body);
     return { result };
   }
+
+  async deleteById(id) {
+    const article = await this.articleModel.findByPk(id);
+
+    if (article) return article.destroy();
+
+    throw new HttpException(
+      'this article is not existed',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  async findById(id) {
+    const article = await this.articleModel.findByPk(id);
+    if (!article) {
+      throw new HttpException(
+        'this article is not existed',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return { result: article };
+  }
 }
