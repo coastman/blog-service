@@ -33,4 +33,9 @@ export class ArticleController {
   async findById(@Param('id') id: number) {
     return await this.articleService.findById(id);
   }
+
+  @Put(':id')
+  async updateById(@Body() body: any, @Param('id') id: number) {
+    return await this.articleService.updateById(body, id);
+  }
 }

@@ -51,4 +51,15 @@ export class ArticleService {
 
     return { result: article };
   }
+
+  async updateById(data, id) {
+    const article = await this.articleModel.findByPk(id);
+    if (article) {
+      await this.articleModel.update(data, {
+        where: { id },
+      });
+      return { result: id };
+    }
+    throw new HttpException('article is not existed', HttpStatus.BAD_REQUEST);
+  }
 }
