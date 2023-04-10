@@ -9,6 +9,11 @@ export class TagService {
     private readonly tagModel: typeof Tag,
   ) {}
 
+  async findAll() {
+    const list = await this.tagModel.findAll();
+    return list;
+  }
+
   async findList(query) {
     const list =
       (await this.tagModel.findAll({

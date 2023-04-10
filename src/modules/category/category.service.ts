@@ -10,6 +10,11 @@ export class CategoryService {
     private readonly categoryModel: typeof Category,
   ) {}
 
+  async findAll() {
+    const list = (await this.categoryModel.findAll()) || [];
+    return list;
+  }
+
   async getList() {
     const list = (await this.categoryModel.findAll()) || [];
 

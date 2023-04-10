@@ -1,12 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Article } from './article.model';
+import { TagService } from '../tag/tag.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectModel(Article)
     private readonly articleModel: typeof Article,
+    private readonly tagService: TagService,
+    private readonly categoryService: CategoryService,
   ) {}
 
   async findPage(query) {
@@ -15,8 +19,20 @@ export class ArticleService {
         offset: (query.page - 1) * query.pageSize,
         limit: parseInt(query.pageSize),
         order: [['updatedAt', 'DESC']],
+        raw: true,
       })) || [];
-
+    // const tagList = (await this.tagService.findAll()).map((model) =>
+    //   model.get({ plain: true }),
+    // );
+    // const categoryList =  (await this.categoryService.findAll()).map((model) =>
+    // model.get({ plain: true }),
+    // );
+    // console.log(list);
+    // list.forEach(item => {
+    //   item.category = {
+    //     categoryId: item.ca
+    //   } 
+    // });
     const total = await this.articleModel.count();
     return {
       list,
