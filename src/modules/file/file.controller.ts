@@ -9,11 +9,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @Controller('file')
 export class FileController {
   @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      dest: 'public',
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return {
       filename: file.filename,
