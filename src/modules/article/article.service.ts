@@ -1,19 +1,29 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Article } from './article.model';
 import { TagService } from '../tag/tag.service';
 import { CategoryService } from '../category/category.service';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectModel(Article)
     private readonly articleModel: typeof Article,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly tagService: TagService,
     private readonly categoryService: CategoryService,
   ) {}
 
   async findPage(query) {
+    const res = await this.cacheManager.get('name');
+    console.log(res);
     const list =
       (await this.articleModel.findAll({
         offset: (query.page - 1) * query.pageSize,

@@ -43,4 +43,7 @@ export class Article extends Model<Article> {
 
   @Column(DataType.TEXT('medium'))
   content: string;
+
+  @Column(DataType.STRING)
+  thumbnailUrl: string;
 }

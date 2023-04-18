@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
+import { AppCacheModule } from './modules/cache/cache.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -10,8 +10,11 @@ import { TagModule } from './modules/tag/tag.module';
 import { ArticleModule } from './modules/article/article.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 import { join } from 'path';
+
 @Module({
   imports: [
+    AppCacheModule,
+
     ConfigModule.forRoot({ isGlobal: true }),
 
     SequelizeModule.forRootAsync({
