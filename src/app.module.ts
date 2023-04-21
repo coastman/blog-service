@@ -8,6 +8,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoryModule } from './modules/category/category.module';
 import { TagModule } from './modules/tag/tag.module';
 import { ArticleModule } from './modules/article/article.module';
+import { CommnetModule } from './modules/comment/commnet.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 import { join } from 'path';
 
@@ -45,6 +46,7 @@ import { join } from 'path';
     CategoryModule,
     TagModule,
     ArticleModule,
+    CommnetModule,
   ],
   controllers: [AppController],
   providers: [AppService],

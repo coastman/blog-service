@@ -16,7 +16,7 @@ export class Article extends Model<Article> {
   @Column({
     type: DataType.STRING,
     get(this) {
-      return this.getDataValue('tagIdList')
+      return (this.getDataValue('tagIdList') || '')
         .split(',')
         .filter((item) => item)
         .map((item) => parseInt(item));
@@ -30,7 +30,7 @@ export class Article extends Model<Article> {
   @Column({
     type: DataType.STRING,
     get(this) {
-      return this.getDataValue('categoryIdList')
+      return (this.getDataValue('categoryIdList') || '')
         .split(',')
         .filter((item) => item)
         .map((item) => parseInt(item));
@@ -46,4 +46,10 @@ export class Article extends Model<Article> {
 
   @Column(DataType.STRING)
   thumbnailUrl: string;
+
+  @Column(DataType.INTEGER)
+  viewCount: number;
+
+  @Column(DataType.INTEGER)
+  likeCount: number;
 }

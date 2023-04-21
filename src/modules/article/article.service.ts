@@ -22,8 +22,6 @@ export class ArticleService {
   ) {}
 
   async findPage(query) {
-    const res = await this.cacheManager.get('name');
-    console.log(res);
     const list =
       (await this.articleModel.findAll({
         offset: (query.page - 1) * query.pageSize,
@@ -67,13 +65,20 @@ export class ArticleService {
   }
 
   async findById(id) {
-    const article = await this.articleModel.findByPk(id);
+    const article = (await this.articleModel.findByPk(id)).get({ plain: true });
+
     if (!article) {
       throw new HttpException(
         'this article is not existed',
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    article.viewCount++;
+    this.articleModel.update(
+      { viewCount: article.viewCount },
+      { where: { id } },
+    );
 
     return { result: article };
   }
