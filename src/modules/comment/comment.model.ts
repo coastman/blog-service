@@ -18,9 +18,8 @@ export class Comment extends Model<Comment> {
   commentator: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     unique: true,
-    autoIncrementIdentity: true,
   })
   commentatorId: number;
 
