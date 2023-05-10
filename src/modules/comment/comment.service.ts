@@ -1,11 +1,14 @@
 import { InjectModel } from '@nestjs/sequelize';
 import { Injectable } from '@nestjs/common';
 import { Comment } from './comment.model';
+import { Article } from '../article/article.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CommentService {
   constructor(
+    @InjectModel(Article)
+    private readonly articleModel: typeof Article,
     @InjectModel(Comment)
     private readonly commentModel: typeof Comment,
   ) {}
@@ -15,8 +18,10 @@ export class CommentService {
   }
 
   async create(body) {
-    const commentatorId = uuidv4();
-    body.commentatorId = commentatorId;
+    if (!body.commentatorId) {
+      const commentatorId = uuidv4();
+      body.commentatorId = commentatorId;
+    }
     const result = await this.commentModel.create(body);
     return {
       result,

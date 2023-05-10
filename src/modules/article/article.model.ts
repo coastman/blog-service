@@ -52,4 +52,7 @@ export class Article extends Model<Article> {
 
   @Column(DataType.INTEGER)
   likeCount: number;
+
+  @Column(DataType.INTEGER)
+  commentCount: number;
 }

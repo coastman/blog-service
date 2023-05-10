@@ -7,15 +7,12 @@ import { TagModule } from '../tag/tag.module';
 import { CategoryModule } from '../category/category.module';
 import { FileModule } from '../file/file.module';
 
+const articleModel = SequelizeModule.forFeature([Article]);
+
 @Module({
-  imports: [
-    SequelizeModule.forFeature([Article]),
-    TagModule,
-    CategoryModule,
-    FileModule,
-  ],
+  imports: [articleModel, TagModule, CategoryModule, FileModule],
   controllers: [ArticleController],
   providers: [ArticleService],
-  exports: [ArticleService],
+  exports: [ArticleService, articleModel],
 })
 export class ArticleModule {}

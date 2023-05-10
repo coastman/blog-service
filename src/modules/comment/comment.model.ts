@@ -19,9 +19,8 @@ export class Comment extends Model<Comment> {
 
   @Column({
     type: DataType.STRING,
-    unique: true,
   })
-  commentatorId: number;
+  commentatorId: string;
 
   @Column(DataType.INTEGER)
   likeCount: number;

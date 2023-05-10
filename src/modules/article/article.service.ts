@@ -26,7 +26,7 @@ export class ArticleService {
       (await this.articleModel.findAll({
         offset: (query.page - 1) * query.pageSize,
         limit: parseInt(query.pageSize),
-        order: [['updatedAt', 'DESC']],
+        order: [['createdAt', 'DESC']],
         raw: true,
       })) || [];
     // const tagList = (await this.tagService.findAll()).map((model) =>
