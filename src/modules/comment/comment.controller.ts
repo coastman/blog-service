@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CommentService } from './comment.service';
 
 @Controller('comment')
@@ -6,8 +6,8 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Get()
-  async page() {
-    return this.commentService.findPage();
+  async page(@Query() query: object) {
+    return this.commentService.findPage(query);
   }
 
   @Get('/byArticle/:id')

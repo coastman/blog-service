@@ -1,4 +1,4 @@
-import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import { Column, Model, Table, DataType, Default } from 'sequelize-typescript';
 import { COMMENT } from 'src/constans/table.constant';
 
 @Table({
@@ -22,9 +22,15 @@ export class Comment extends Model<Comment> {
   })
   commentatorId: string;
 
+  @Default(0)
   @Column(DataType.INTEGER)
   likeCount: number;
 
+  @Default(0)
   @Column(DataType.INTEGER)
   dislikeCount: number;
+
+  @Default(0)
+  @Column(DataType.INTEGER)
+  status: number;
 }

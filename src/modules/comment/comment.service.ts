@@ -13,14 +13,30 @@ export class CommentService {
     private readonly commentModel: typeof Comment,
   ) {}
 
-  async findPage() {
-    //
+  async findPage(query) {
+    const list =
+      (await this.commentModel.findAll({
+        offset: (query.page - 1) * query.pageSize,
+        limit: parseInt(query.pageSize),
+        order: [['createdAt', 'DESC']],
+        raw: true,
+      })) || [];
+    const total = await this.commentModel.count();
+    return {
+      list,
+      total,
+    };
   }
 
   async create(body) {
     if (!body.commentatorId) {
       const commentatorId = uuidv4();
       body.commentatorId = commentatorId;
+    }
+    if (body.articleId) {
+      await this.articleModel.increment('commentCount', {
+        where: { id: body.articleId },
+      });
     }
     const result = await this.commentModel.create(body);
     return {
