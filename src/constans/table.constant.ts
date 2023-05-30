@@ -5,3 +5,5 @@ export const TAG = 'tag';
 export const ARTICLE = 'article';
 
 export const COMMENT = 'comment';
+
+export const LIKE = 'like';

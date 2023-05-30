@@ -38,4 +38,9 @@ export class ArticleController {
   async updateById(@Body() body: any, @Param('id') id: number) {
     return await this.articleService.updateById(body, id);
   }
+
+  @Post('/like')
+  async liking(@Body() body: any) {
+    return await this.articleService.liking(body);
+  }
 }

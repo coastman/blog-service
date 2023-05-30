@@ -1,8 +1,9 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Comment } from './comment.model';
 import { Article } from '../article/article.model';
 import { v4 as uuidv4 } from 'uuid';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class CommentService {
@@ -14,10 +15,24 @@ export class CommentService {
   ) {}
 
   async findPage(query) {
+    const where: any = {
+      [Op.or]: {
+        content: {
+          [Op.like]: `%${query.keyword}%`,
+        },
+        commentator: {
+          [Op.like]: `%${query.keyword}%`,
+        },
+      },
+    };
+
+    if (query.status) where.status = query.status;
+
     const list =
       (await this.commentModel.findAll({
         offset: (query.page - 1) * query.pageSize,
         limit: parseInt(query.pageSize),
+        where,
         order: [['createdAt', 'DESC']],
         raw: true,
       })) || [];
@@ -91,5 +106,17 @@ export class CommentService {
     });
 
     return { list };
+  }
+
+  async updateById(body: any, id: number) {
+    const isExist = await this.commentModel.findByPk(id);
+    if (!isExist) {
+      throw new HttpException(
+        'this comment is not existed',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    await this.commentModel.update({ status: body.status }, { where: { id } });
+    return { result: id };
   }
 }

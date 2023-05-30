@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Put } from '@nestjs/common';
 import { CommentService } from './comment.service';
 
 @Controller('comment')
@@ -18,5 +18,10 @@ export class CommentController {
   @Post()
   async create(@Body() body: any) {
     return await this.commentService.create(body);
+  }
+
+  @Put(':id')
+  async updateById(@Body() body: any, @Param('id') id: number) {
+    return await this.commentService.updateById(body, id);
   }
 }

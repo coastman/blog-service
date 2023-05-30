@@ -10,6 +10,7 @@ import { Article } from './article.model';
 import { TagService } from '../tag/tag.service';
 import { CategoryService } from '../category/category.service';
 import { Cache } from 'cache-manager';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class ArticleService {
@@ -19,6 +20,7 @@ export class ArticleService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly tagService: TagService,
     private readonly categoryService: CategoryService,
+    private readonly likeService: LikeService,
   ) {}
 
   async findPage(query) {
@@ -92,5 +94,15 @@ export class ArticleService {
       return { result: id };
     }
     throw new HttpException('article is not existed', HttpStatus.BAD_REQUEST);
+  }
+
+  async liking(params) {
+    const resList = await Promise.all([
+      this.articleModel.increment('likeCount', {
+        where: { id: params.refId },
+      }),
+      this.likeService.liking(params),
+    ]);
+    return { result: resList[1] };
   }
 }

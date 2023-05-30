@@ -9,6 +9,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { TagModule } from './modules/tag/tag.module';
 import { ArticleModule } from './modules/article/article.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { LikeModule } from './modules/like/like.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 import { join } from 'path';
 
@@ -47,6 +48,7 @@ import { join } from 'path';
     TagModule,
     ArticleModule,
     CommentModule,
+    LikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
