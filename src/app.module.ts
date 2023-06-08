@@ -10,6 +10,7 @@ import { TagModule } from './modules/tag/tag.module';
 import { ArticleModule } from './modules/article/article.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeModule } from './modules/like/like.module';
+import { StatisticModule } from './modules/statistic/statistic.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 import { join } from 'path';
 
@@ -49,6 +50,7 @@ import { join } from 'path';
     ArticleModule,
     CommentModule,
     LikeModule,
+    StatisticModule,
   ],
   controllers: [AppController],
   providers: [AppService],

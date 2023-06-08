@@ -15,9 +15,7 @@ export class LikeService {
     params.userId = params.likeUserId;
     delete params.likeUserId;
     const result = await this.likeModel.create(params);
-    return {
-      result,
-    };
+    return result;
   }
 
   async cancel(params: any) {

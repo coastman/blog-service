@@ -24,4 +24,9 @@ export class CommentController {
   async updateById(@Body() body: any, @Param('id') id: number) {
     return await this.commentService.updateById(body, id);
   }
+
+  @Post('/like')
+  async liking(@Body() body: any) {
+    return await this.commentService.liking(body);
+  }
 }

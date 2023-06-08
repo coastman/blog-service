@@ -4,6 +4,7 @@ import { Comment } from './comment.model';
 import { Article } from '../article/article.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class CommentService {
@@ -12,6 +13,7 @@ export class CommentService {
     private readonly articleModel: typeof Article,
     @InjectModel(Comment)
     private readonly commentModel: typeof Comment,
+    private readonly likeService: LikeService,
   ) {}
 
   async findPage(query) {
@@ -118,5 +120,22 @@ export class CommentService {
     }
     await this.commentModel.update({ status: body.status }, { where: { id } });
     return { result: id };
+  }
+
+  async liking(params) {
+    const resList = await Promise.all([
+      this.commentModel.increment('likeCount', {
+        where: { id: params.refId },
+      }),
+      this.likeService.liking(params),
+    ]);
+    return { result: resList[1] };
+  }
+
+  async count() {
+    const count = await this.commentModel.count();
+    return {
+      count,
+    };
   }
 }

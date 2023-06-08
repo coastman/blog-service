@@ -24,13 +24,14 @@ export class ArticleService {
   ) {}
 
   async findPage(query) {
-    const list =
+    let list =
       (await this.articleModel.findAll({
         offset: (query.page - 1) * query.pageSize,
         limit: parseInt(query.pageSize),
         order: [['createdAt', 'DESC']],
-        raw: true,
+        // raw: true,
       })) || [];
+    list = list.map((model) => model.get({ plain: true }));
     // const tagList = (await this.tagService.findAll()).map((model) =>
     //   model.get({ plain: true }),
     // );
@@ -104,5 +105,22 @@ export class ArticleService {
       this.likeService.liking(params),
     ]);
     return { result: resList[1] };
+  }
+
+  async hotList() {
+    const list = (
+      (await this.articleModel.findAll({
+        offset: 0,
+        limit: 16,
+        order: [['commentCount', 'DESC']],
+      })) || []
+    ).map((model) => model.get({ plain: true }));
+
+    const count = (await this.articleModel.count()) || 0;
+
+    return {
+      list,
+      count,
+    };
   }
 }

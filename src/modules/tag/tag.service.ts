@@ -66,4 +66,13 @@ export class TagService {
 
     throw new HttpException('this tag is not existed', HttpStatus.BAD_REQUEST);
   }
+
+  async findAllAndCount() {
+    const count = await this.tagModel.count();
+    const list = await this.tagModel.findAll();
+    return {
+      list,
+      count,
+    };
+  }
 }
