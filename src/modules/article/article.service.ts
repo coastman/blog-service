@@ -83,6 +83,11 @@ export class ArticleService {
       { where: { id } },
     );
 
+    const views: number =
+      (await this.cacheManager.get('blog:article:view-count')) || 0;
+
+    this.cacheManager.set('blog:article:view-count', views + 1, 0);
+
     return { result: article };
   }
 
