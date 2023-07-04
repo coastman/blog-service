@@ -11,12 +11,16 @@ import { ArticleModule } from './modules/article/article.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeModule } from './modules/like/like.module';
 import { StatisticModule } from './modules/statistic/statistic.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ScheduleModule as Schedule } from './modules/schedule/schedule.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 import { join } from 'path';
 
 @Module({
   imports: [
     AppCacheModule,
+    ScheduleModule.forRoot(),
+    Schedule,
 
     ConfigModule.forRoot({ isGlobal: true }),
 
