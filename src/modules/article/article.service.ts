@@ -6,9 +6,8 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 import { Article } from './article.model';
-import { TagService } from '../tag/tag.service';
-import { CategoryService } from '../category/category.service';
 import { Cache } from 'cache-manager';
 import { LikeService } from '../like/like.service';
 
@@ -18,8 +17,6 @@ export class ArticleService {
     @InjectModel(Article)
     private readonly articleModel: typeof Article,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private readonly tagService: TagService,
-    private readonly categoryService: CategoryService,
     private readonly likeService: LikeService,
   ) {}
 
@@ -29,21 +26,8 @@ export class ArticleService {
         offset: (query.page - 1) * query.pageSize,
         limit: parseInt(query.pageSize),
         order: [['createdAt', 'DESC']],
-        // raw: true,
       })) || [];
     list = list.map((model) => model.get({ plain: true }));
-    // const tagList = (await this.tagService.findAll()).map((model) =>
-    //   model.get({ plain: true }),
-    // );
-    // const categoryList =  (await this.categoryService.findAll()).map((model) =>
-    // model.get({ plain: true }),
-    // );
-    // console.log(list);
-    // list.forEach(item => {
-    //   item.category = {
-    //     categoryId: item.ca
-    //   } 
-    // });
     const total = await this.articleModel.count();
     return {
       list,
@@ -77,6 +61,54 @@ export class ArticleService {
       );
     }
 
+    const where = {
+      id: {
+        [Op.ne]: article.id,
+      },
+      [Op.or]: {
+        categoryIdList: {
+          [Op.in]: article.categoryIdList,
+        },
+        tagIdList: {
+          [Op.in]: article.tagIdList,
+        },
+      },
+    };
+
+    const [prev, next, relatedList] = await Promise.all([
+      (
+        await this.articleModel.findOne({
+          where: {
+            id: {
+              [Op.ne]: article.id,
+            },
+            createdAt: {
+              [Op.gte]: article.createdAt,
+            },
+          },
+          order: [['createdAt', 'ASC']],
+          limit: 1,
+        })
+      )?.get({ plain: true }),
+      (
+        await this.articleModel.findOne({
+          where: {
+            id: {
+              [Op.ne]: article.id,
+            },
+            createdAt: {
+              [Op.lte]: article.createdAt,
+            },
+          },
+          order: [['createdAt', 'DESC']],
+          limit: 1,
+        })
+      )?.get({ plain: true }),
+      (
+        await this.articleModel.findAll({ where })
+      )?.map((item) => item?.get({ plain: true })),
+    ]);
+
     article.viewCount++;
     this.articleModel.update(
       { viewCount: article.viewCount },
@@ -87,8 +119,12 @@ export class ArticleService {
       (await this.cacheManager.get('blog:article:view-count')) || 0;
 
     this.cacheManager.set('blog:article:view-count', views + 1, 0);
-
-    return { result: article };
+    return {
+      result: article,
+      prevArticle: prev,
+      nextArticle: next,
+      relatedList,
+    };
   }
 
   async updateById(data, id) {
