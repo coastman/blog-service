@@ -11,6 +11,7 @@ import { ArticleModule } from './modules/article/article.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { LikeModule } from './modules/like/like.module';
 import { StatisticModule } from './modules/statistic/statistic.module';
+import { UserModule } from './modules/user/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleModule as Schedule } from './modules/schedule/schedule.module';
 import { RsaModule } from './modules/rsa/rsa.module';
@@ -56,6 +57,7 @@ import { join } from 'path';
     CommentModule,
     LikeModule,
     StatisticModule,
+    UserModule,
     RsaModule,
   ],
   controllers: [AppController],
