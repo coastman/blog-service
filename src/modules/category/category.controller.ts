@@ -6,14 +6,16 @@ import {
   Post,
   Get,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoryDTO } from './category.dto';
 import { CategoryService } from './category.service';
-
+import { AuthGuard } from 'src/guards/auth.guard';
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @UseGuards(AuthGuard)
   @Get()
   async getCategories() {
     return await this.categoryService.getList();

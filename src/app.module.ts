@@ -14,7 +14,7 @@ import { StatisticModule } from './modules/statistic/statistic.module';
 import { UserModule } from './modules/user/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleModule as Schedule } from './modules/schedule/schedule.module';
-import { RsaModule } from './modules/rsa/rsa.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { LoggerMiddleware } from './middlewares/log.middleware';
 import { join } from 'path';
 
@@ -58,7 +58,7 @@ import { join } from 'path';
     LikeModule,
     StatisticModule,
     UserModule,
-    RsaModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
