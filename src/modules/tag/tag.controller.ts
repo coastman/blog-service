@@ -8,6 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { Public } from 'src/decorators/public.decorator';
 import { TagService } from './tag.service';
 
 @Controller('tag')
@@ -15,6 +16,7 @@ export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @Get()
+  @Public()
   async findList(@Query() query: object) {
     return await this.tagService.findList(query);
   }

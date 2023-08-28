@@ -1,20 +1,24 @@
 import { Body, Controller, Get, Param, Post, Query, Put } from '@nestjs/common';
+import { Public } from 'src/decorators/public.decorator';
 import { CommentService } from './comment.service';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @Public()
   @Get()
   async page(@Query() query: object) {
     return this.commentService.findPage(query);
   }
 
+  @Public()
   @Get('/byArticle/:id')
   async findByArticleId(@Param('id') id: number) {
     return this.commentService.findByArticle(id);
   }
 
+  @Public()
   @Post()
   async create(@Body() body: any) {
     return await this.commentService.create(body);
@@ -25,6 +29,7 @@ export class CommentController {
     return await this.commentService.updateById(body, id);
   }
 
+  @Public()
   @Post('/like')
   async liking(@Body() body: any) {
     return await this.commentService.liking(body);

@@ -6,16 +6,16 @@ import {
   Post,
   Get,
   Put,
-  UseGuards,
 } from '@nestjs/common';
+import { Public } from 'src/decorators/public.decorator';
 import { CategoryDTO } from './category.dto';
 import { CategoryService } from './category.service';
-import { AuthGuard } from 'src/guards/auth.guard';
+
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @UseGuards(AuthGuard)
+  @Public()
   @Get()
   async getCategories() {
     return await this.categoryService.getList();
@@ -26,6 +26,7 @@ export class CategoryController {
     return await this.categoryService.create(body);
   }
 
+  @Public()
   @Get(':id')
   async getCategory(@Param('id') id: number) {
     return this.categoryService.findById(id);
