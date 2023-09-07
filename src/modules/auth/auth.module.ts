@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
     JwtModule.register({
       global: true,
       secret: 'this is a secret',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '2 days' },
     }),
   ],
   providers: [AuthService],
