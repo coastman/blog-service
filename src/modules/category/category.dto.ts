@@ -8,5 +8,17 @@ export class CategoryDTO {
 
   @IsString()
   @MaxLength(20)
+  code: string;
+
+  @IsString()
+  @MaxLength(20)
+  icon: string;
+
+  @IsString()
+  @MaxLength(20)
   description: string;
+
+  @IsString()
+  @MaxLength(300)
+  backgroundUrl: string;
 }

@@ -6,7 +6,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
+import { Op, fn, col } from 'sequelize';
 import { Article } from './article.model';
 import { Cache } from 'cache-manager';
 import { LikeService } from '../like/like.service';
@@ -21,11 +21,16 @@ export class ArticleService {
   ) {}
 
   async findPage(query) {
+    let where = {};
+    // find_in_set
+    if (query.categotyId)
+      where = fn('find_in_set', query.categotyId, col('category_id_list'));
     let list =
       (await this.articleModel.findAll({
         offset: (query.page - 1) * query.pageSize,
         limit: parseInt(query.pageSize),
         order: [['createdAt', 'DESC']],
+        where,
       })) || [];
     list = list.map((model) => model.get({ plain: true }));
     const total = await this.articleModel.count();

@@ -41,7 +41,13 @@ export class CategoryService {
     throw new HttpException('category is not existed', HttpStatus.BAD_REQUEST);
   }
 
-  async create({ name, description = '' }) {
+  async create({
+    name,
+    description = '',
+    backgroundUrl = '',
+    code = '',
+    icon = '',
+  }) {
     const existedCategory = await this.categoryModel.findOne({
       where: { name },
     });
@@ -53,7 +59,13 @@ export class CategoryService {
       );
     }
 
-    const result = await this.categoryModel.create({ name, description });
+    const result = await this.categoryModel.create({
+      name,
+      description,
+      backgroundUrl,
+      code,
+      icon,
+    });
 
     return { result };
   }

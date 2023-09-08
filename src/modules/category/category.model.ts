@@ -13,4 +13,13 @@ export class Category extends Model<Category> {
 
   @Column(DataType.STRING)
   description: string;
+
+  @Column(DataType.STRING)
+  backgroundUrl: string;
+
+  @Column(DataType.STRING)
+  code: string;
+
+  @Column(DataType.STRING)
+  icon: string;
 }
