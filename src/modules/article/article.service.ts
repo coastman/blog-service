@@ -25,6 +25,16 @@ export class ArticleService {
     // find_in_set
     if (query.categotyId)
       where = fn('find_in_set', query.categotyId, col('category_id_list'));
+    if (query.dateRange) {
+      where = {
+        createdAt: {
+          [Op.between]: query.dateRange.map(
+            (date: string) => new Date(Number(date)),
+          ),
+        },
+      };
+    }
+    if (query.tagId) where = fn('find_in_set', query.tagId, col('tag_id_list'));
     let list =
       (await this.articleModel.findAll({
         offset: (query.page - 1) * query.pageSize,
@@ -33,7 +43,7 @@ export class ArticleService {
         where,
       })) || [];
     list = list.map((model) => model.get({ plain: true }));
-    const total = await this.articleModel.count();
+    const total = await this.articleModel.count({ where });
     return {
       list,
       total,
@@ -157,7 +167,7 @@ export class ArticleService {
     const list = (
       (await this.articleModel.findAll({
         offset: 0,
-        limit: 16,
+        limit: 10,
         order: [['commentCount', 'DESC']],
       })) || []
     ).map((model) => model.get({ plain: true }));
@@ -167,6 +177,16 @@ export class ArticleService {
     return {
       list,
       count,
+    };
+  }
+
+  async activeDate() {
+    const deteList = await this.articleModel.findAll({
+      attributes: ['createdAt'],
+    });
+
+    return {
+      deteList,
     };
   }
 }

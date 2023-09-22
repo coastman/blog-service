@@ -14,18 +14,25 @@ export class StatisticService {
   ) {}
 
   async statistic() {
-    const [hotStatistic, tagStatistic, commentStatistic, todayViewCount] =
-      await Promise.all([
-        this.articleService.hotList(),
-        this.tagService.findAllAndCount(),
-        this.commentService.count(),
-        this.cacheManager.get('blog:article:view-count'),
-      ]);
+    const [
+      hotStatistic,
+      tagStatistic,
+      commentStatistic,
+      todayViewCount,
+      dateList,
+    ] = await Promise.all([
+      this.articleService.hotList(),
+      this.tagService.findAllAndCount(),
+      this.commentService.count(),
+      this.cacheManager.get('blog:article:view-count'),
+      this.articleService.activeDate(),
+    ]);
     return {
       hotStatistic,
       tagStatistic,
       commentStatistic,
       todayViewCount,
+      dateList,
     };
   }
 }

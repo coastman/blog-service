@@ -30,14 +30,26 @@ export class TagService {
     };
   }
 
-  async create({ name, description = '' }) {
+  async create({
+    name,
+    description = '',
+    backgroundUrl = '',
+    code = '',
+    icon = '',
+  }) {
     const existedTag = await this.tagModel.findOne({ where: { name } });
 
     if (existedTag) {
       throw new HttpException('this tag is existed', HttpStatus.BAD_REQUEST);
     }
 
-    const result = await this.tagModel.create({ name, description });
+    const result = await this.tagModel.create({
+      name,
+      description,
+      backgroundUrl,
+      code,
+      icon,
+    });
 
     return { result };
   }

@@ -13,4 +13,13 @@ export class Tag extends Model<Tag> {
 
   @Column(DataType.STRING)
   description: string;
+
+  @Column(DataType.STRING)
+  backgroundUrl: string;
+
+  @Column(DataType.STRING)
+  code: string;
+
+  @Column(DataType.STRING)
+  icon: string;
 }
