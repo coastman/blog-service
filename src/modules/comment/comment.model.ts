@@ -33,4 +33,26 @@ export class Comment extends Model<Comment> {
   @Default(0)
   @Column(DataType.INTEGER)
   status: number;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  agent: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  ip: string;
+
+  @Default('{}')
+  @Column({
+    type: DataType.STRING,
+    get(this) {
+      return JSON.parse(this.getDataValue('ipLocation') || '{}');
+    },
+    set(this, data: any) {
+      this.setDataValue('ipLocation', JSON.stringify(data));
+    },
+  })
+  ipLocation: string;
 }

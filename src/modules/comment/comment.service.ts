@@ -5,6 +5,7 @@ import { Article } from '../article/article.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize';
 import { LikeService } from '../like/like.service';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class CommentService {
@@ -14,6 +15,7 @@ export class CommentService {
     @InjectModel(Comment)
     private readonly commentModel: typeof Comment,
     private readonly likeService: LikeService,
+    private readonly httpService: HttpService,
   ) {}
 
   async findPage(query) {
@@ -55,6 +57,18 @@ export class CommentService {
         where: { id: body.articleId },
       });
     }
+    const res = await this.httpService.axiosRef.get(
+      'http://ip-api.com/json/202.81.237.231?fields=status,message,country,countryCode,region,regionName,city,zip',
+    );
+    const ipLocation = {
+      countryName: res.data.country,
+      countryCode: res.data.countryCode,
+      regionName: res.data.regionName,
+      regionCode: res.data.region,
+      city: res.data.city,
+      zip: res.data.zip,
+    };
+    body.ipLocation = ipLocation;
     const result = await this.commentModel.create(body);
     return {
       result,

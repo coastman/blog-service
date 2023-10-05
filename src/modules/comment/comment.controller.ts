@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Put,
+  Request,
+} from '@nestjs/common';
 import { Public } from 'src/decorators/public.decorator';
 import { CommentService } from './comment.service';
 
@@ -20,7 +29,11 @@ export class CommentController {
 
   @Public()
   @Post()
-  async create(@Body() body: any) {
+  async create(@Body() body: any, @Request() request: any) {
+    const ip = request.ip.replace('::ffff:', '').replace('::1', '') || null;
+    const agent = request.headers['user-agent'];
+    body.ip = ip;
+    body.agent = agent;
     return await this.commentService.create(body);
   }
 
