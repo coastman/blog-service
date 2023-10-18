@@ -16,4 +16,7 @@ export class Like extends Model<Like> {
 
   @Column(DataType.INTEGER)
   status: number;
+
+  @Column(DataType.INTEGER)
+  downvote: number;
 }

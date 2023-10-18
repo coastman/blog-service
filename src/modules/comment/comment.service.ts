@@ -92,8 +92,12 @@ export class CommentService {
     const list = [];
     commentList.forEach((comment) => {
       const parent = commentMap[comment.parentId];
-      if (parent) (parent.children || (parent.children = [])).push(comment);
-      else list.push(comment);
+      if (parent) {
+        (comment as any).parentName = parent.commentator;
+        (parent.children || (parent.children = [])).push(comment);
+      } else {
+        list.push(comment);
+      }
     });
 
     list.sort((a, b) => b.createdAt - a.createdAt);
@@ -142,6 +146,16 @@ export class CommentService {
         where: { id: params.refId },
       }),
       this.likeService.liking(params),
+    ]);
+    return { result: resList[1] };
+  }
+
+  async downing(params) {
+    const resList = await Promise.all([
+      this.commentModel.increment('dislikeCount', {
+        where: { id: params.refId },
+      }),
+      this.likeService.downing(params),
     ]);
     return { result: resList[1] };
   }

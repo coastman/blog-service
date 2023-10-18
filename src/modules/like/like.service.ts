@@ -11,11 +11,30 @@ export class LikeService {
   ) {}
 
   async liking(params: any) {
-    if (!params.likeUserId) params.likeUserId = uuidv4();
-    params.userId = params.likeUserId;
-    delete params.likeUserId;
-    const result = await this.likeModel.create(params);
-    return result;
+    if (!params.userId) params.userId = uuidv4();
+    let record = await this.likeModel.findOne({
+      where: {
+        refId: params.refId,
+        type: params.type,
+        userId: params.userId,
+      },
+    });
+    if (record) {
+      await this.likeModel.update(
+        {
+          status: 1,
+        },
+        {
+          where: {
+            refId: params.refId,
+            type: params.type,
+          },
+        },
+      );
+    } else {
+      record = await this.likeModel.create(params);
+    }
+    return record;
   }
 
   async cancel(params: any) {
@@ -30,5 +49,32 @@ export class LikeService {
         },
       },
     );
+  }
+
+  async downing(params: any) {
+    if (!params.userId) params.userId = uuidv4();
+    let record = await this.likeModel.findOne({
+      where: {
+        refId: params.refId,
+        type: params.type,
+        userId: params.userId,
+      },
+    });
+    if (record) {
+      await this.likeModel.update(
+        {
+          downvote: 1,
+        },
+        {
+          where: {
+            refId: params.refId,
+            type: params.type,
+          },
+        },
+      );
+    } else {
+      record = await this.likeModel.create(params);
+    }
+    return record;
   }
 }

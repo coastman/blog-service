@@ -47,4 +47,10 @@ export class CommentController {
   async liking(@Body() body: any) {
     return await this.commentService.liking(body);
   }
+
+  @Public()
+  @Post('/down')
+  async down(@Body() body: any) {
+    return await this.commentService.downing(body);
+  }
 }
